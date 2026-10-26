@@ -261,7 +261,110 @@ footer{text-align:center;background:#061e19;color:#dce4df;padding:25px;font-size
 </main>
 
 <footer>AVAB Commercial Cleaning · Sydney, NSW<br>Two Brothers. One Dream. A Cleaner Tomorrow.<br>© 2026 AVAB Commercial Cleaning</footer>
+<!-- AVAB CLEANING QUOTE CALCULATOR -->
+<section id="quote-calculator" style="padding:50px 20px;background:#f6f5f0;font-family:Arial,sans-serif;color:#1c2925">
+  <div style="max-width:850px;margin:auto">
+    <h2 style="color:#102b27;font-size:30px">Get a Cleaning Estimate</h2>
+    <p>Tell us about your commercial property in Greater Sydney. This is an indicative estimate only; your final quote will be confirmed by AVAB.</p>
 
+    <form name="cleaning-quote" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="cleaning-quote">
+      <p style="display:none"><label>Leave blank: <input name="bot-field"></label></p>
+
+      <p><label>Your name *</label><br>
+      <input name="name" required style="width:100%;padding:12px" /></p>
+
+      <p><label>Email address *</label><br>
+      <input type="email" name="email" required style="width:100%;padding:12px" /></p>
+
+      <p><label>Phone number *</label><br>
+      <input type="tel" name="phone" required style="width:100%;padding:12px" /></p>
+
+      <p><label>Business name</label><br>
+      <input name="business" style="width:100%;padding:12px" /></p>
+
+      <p><label>Property suburb *</label><br>
+      <input name="suburb" required placeholder="e.g. Bella Vista" style="width:100%;padding:12px" /></p>
+
+      <p><label>Property type *</label><br>
+      <select name="property_type" required style="width:100%;padding:12px">
+        <option value="">Choose property type</option>
+        <option>Office</option>
+        <option>Gym or fitness centre</option>
+        <option>Retail or showroom</option>
+        <option>Medical rooms</option>
+        <option>Strata common areas</option>
+        <option>Other commercial property</option>
+      </select></p>
+
+      <p><label>Approximate size *</label><br>
+      <select id="avab-size" name="property_size" required style="width:100%;padding:12px">
+        <option value="">Choose size</option>
+        <option value="1.5">Up to 100 m²</option>
+        <option value="3">101–300 m²</option>
+        <option value="5">301–600 m²</option>
+        <option value="7">Over 600 m²</option>
+      </select></p>
+
+      <p><label>Cleaning frequency *</label><br>
+      <select id="avab-frequency" name="frequency" required style="width:100%;padding:12px">
+        <option value="">Choose frequency</option>
+        <option value="1">One-off</option>
+        <option value="1">Weekly</option>
+        <option value="2">Twice a week</option>
+        <option value="3">Three times a week</option>
+        <option value="5">Five times a week</option>
+        <option value="7">Daily</option>
+      </select></p>
+
+      <p><label>Areas to clean or special requirements</label><br>
+      <textarea name="requirements" rows="4" style="width:100%;padding:12px" placeholder="Bathrooms, floors, kitchen, bins, preferred time..."></textarea></p>
+
+      <div style="background:#102b27;color:white;padding:20px;border-radius:8px">
+        <strong>Indicative estimate</strong>
+        <p id="avab-estimate" style="font-size:25px;color:#d8c69a">Select size and frequency</p>
+        <small>Provisional calculation only. Final pricing depends on the property, scope and cleaning requirements.</small>
+      </div>
+
+      <input type="hidden" name="indicative_estimate" id="avab-estimate-value">
+
+      <p><button type="submit" style="background:#102b27;color:white;padding:15px 22px;border:0;border-radius:5px;font-size:16px">Send Enquiry to AVAB</button></p>
+    </form>
+  </div>
+</section>
+
+<script>
+(function () {
+  const size = document.getElementById('avab-size');
+  const frequency = document.getElementById('avab-frequency');
+  const display = document.getElementById('avab-estimate');
+  const hidden = document.getElementById('avab-estimate-value');
+
+  function calculate() {
+    if (!size.value || !frequency.value) {
+      display.textContent = 'Select size and frequency';
+      hidden.value = 'Not calculated';
+      return;
+    }
+
+    const hours = Number(size.value);
+    const visits = Number(frequency.value);
+    const price = Math.max(80, Math.round(hours * 50));
+    const money = n => n.toLocaleString('en-AU', {
+      style: 'currency',
+      currency: 'AUD',
+      maximumFractionDigits: 0
+    });
+
+    display.textContent = money(price) + ' per visit';
+    hidden.value = money(price) + ' per visit; estimated ' +
+      money(price * visits) + ' per week where applicable';
+  }
+
+  size.addEventListener('change', calculate);
+  frequency.addEventListener('change', calculate);
+})();
+</script>
 </body>
 
 </html>
